@@ -54,12 +54,15 @@ breads.post('/', (req, res) => {
 
 // DELETE
 breads.delete('/:indexArray', (req, res) => {
+  console.log("Deleting Bread index: " + req.params.indexArray)
   Bread.splice(req.params.indexArray, 1)
   res.status(303).redirect('/breads')
 })
 
 // UPDATE
 breads.put('/:arrayIndex', (req, res) => {
+  console.log("Updating Bread: " + req.params.arrayIndex)
+  console.log(req.body)
   if(req.body.hasGluten === 'on') {
     req.body.hasGluten = true
   } else {
@@ -71,4 +74,5 @@ breads.put('/:arrayIndex', (req, res) => {
 
 
 module.exports = breads
+
 
