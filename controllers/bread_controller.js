@@ -44,18 +44,37 @@ breads.get('/:id', (req, res) => {
 })
 
 // CREATE
+// breads.post('/', (req, res) => {
+//   if (!req.body.image) {
+//     req.body.image = undefined
+//   }
+//   if(req.body.hasGluten === 'on') {
+//     req.body.hasGluten = true
+//   } else {
+//     req.body.hasGluten = false
+//   }
+//   Bread.create(req.body)
+//   res.redirect('/breads')
+// })
 breads.post('/', (req, res) => {
   if (!req.body.image) {
     req.body.image = undefined
   }
-  if(req.body.hasGluten === 'on') {
+  if (req.body.hasGluten === 'on') {
     req.body.hasGluten = true
   } else {
     req.body.hasGluten = false
   }
+
   Bread.create(req.body)
-  res.redirect('/breads')
+    .then(() => {
+      res.redirect('/breads')
+    })
+    .catch(err => {
+      res.render('error', {message: 'Failed to create bread', error: err})
+    })
 })
+
 
 //CREATE MANY
 breads.get('/data/seed', (req, res) => {
