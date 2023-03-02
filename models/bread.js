@@ -13,7 +13,10 @@ const breadSchema = new Schema({
     enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe']
   }
 })
-
+//helper methds
+breadSchema.methods.getBakedBy = function () {
+  return `${this.name} was baked with love by ${this.baker}`
+}
 const Bread = mongoose.model('Bread', breadSchema)
 module.exports = Bread
 

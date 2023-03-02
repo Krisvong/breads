@@ -19,7 +19,7 @@ function New () {
             name="image"
             id="image"/>
           <label htmlFor="baker">Baker</label> 
-          <select name="baker" id="baker">
+          <select name="baker" id="baker" defaultValue={bread.baker}>
             <option value="Chandler">Chandler</option>
             <option value="Joey">Joey</option>
             <option value="Monica">Monica</option>
