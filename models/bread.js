@@ -9,15 +9,39 @@ const breadSchema = new Schema({
   hasGluten: Boolean,
   image: { type: String, default: 'https://www.tastingtable.com/img/gallery/30-types-of-bread-explained/intro-1657560060.jpg' },
   baker: {
-    type: String,
-    enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe']
+    type: Schema.Types.ObjectID,
+    ref: 'Baker'
   }
 })
-//helper methds
+
+//helper instance methods
 breadSchema.methods.getBakedBy = function () {
   return `${this.name} was baked with love by ${this.baker}`
 }
+
+//helper static methods
+breadSchema.statics.getBakedByJoey = function () {
+  return this.find({ baker: { $eq: "Joey"} })
+}
+
 const Bread = mongoose.model('Bread', breadSchema)
 module.exports = Bread
 
-  
+  // helper static methods
+// breadSchema.statics.getBakedByJoey = function(bakerName){
+//   return this.find({ baker: { bakerName } })
+// }
+
+// breads.get('/:id', (req, res) => {
+//   Bread.findById(req.params.id)
+//     .then(foundBread => {
+//       const breadsByJoey = Bread.getBakedByJoey();
+//       console.log(breadsByJoey);
+//       res.render('show', {
+//         bread: foundBread
+//       })
+//     })
+//     .catch(err => {
+//       res.send('404')
+//     })
+// })

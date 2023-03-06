@@ -1,7 +1,9 @@
+// dependencies
 const express = require('express')
 const breads = express.Router()
 const Bread = require('../models/bread.js')
 const seedData = require('./seedData')
+const Baker = require('../models/baker.js')
 
 // INDEX
 breads.get('/', (req, res) => {
@@ -16,7 +18,12 @@ breads.get('/', (req, res) => {
 
 // NEW
 breads.get('/new', (req, res) => {
-  res.render('new')
+  Baker.find()
+    .then(foundBakers => { 
+        res.render('new', {
+          bakers: foundBakers
+        })
+    })   
 })
 
 // EDIT
@@ -34,8 +41,10 @@ breads.get('/:id/edit', (req, res) => {
 breads.get('/:id', (req, res) => {
   Bread.findById(req.params.id)
       .then(foundBread => {
-        const bakedBy = foundBread.getBakedBy()
-        console.log(bakedBy)
+        const breadsByJoey = Bread.getBakedByJoey();
+        console.log(breadsByJoey)
+        // const bakedBy = foundBread.getBakedBy()
+        // console.log(bakedBy)
           res.render('show', {
               bread: foundBread
           })
@@ -65,22 +74,21 @@ breads.post('/', (req, res) => {
     })
 })
 
+// DELETE
+breads.delete('/:id', (req, res) => {
+  Bread.findByIdAndDelete(req.params.id)
+   .then(deletedBread => {
+     console.log(deletedBread);
+     res.status(303).redirect('/breads')
+  })
+})
 
-//CREATE MANY
+// SEED
 breads.get('/data/seed', (req, res) => {
   Bread.insertMany(seedData)
      .then(createdBreads => {
       res.redirect('/breads')
      })
-})
-
-// DELETE
-breads.delete('/:id', (req, res) => {
-  console.log("Deleting Bread index: " + req.params.id)
-  Bread.findByIdAndDelete(req.params.id)
-  .then(deletedBread => {
-    res.status(303).redirect('/breads')
-  })
 })
 
 // UPDATE
