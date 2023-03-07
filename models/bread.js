@@ -14,34 +14,18 @@ const breadSchema = new Schema({
   }
 })
 
-//helper instance methods
-breadSchema.methods.getBakedBy = function () {
-  return `${this.name} was baked with love by ${this.baker}`
+// helper instance methods 
+breadSchema.methods.getBakedBy = function(){
+  return `${this.name} was baked with love by ${this.baker?.name}, who has been with us since ${this.baker?.startDate?.getFullYear()}. ${this.baker?.bio}.`
 }
 
 //helper static methods
-breadSchema.statics.getBakedByJoey = function () {
-  return this.find({ baker: { $eq: "Joey"} })
-}
+// breadSchema.statics.getBakedByJoey = function () {
+//   return this.find({ baker: { $eq: "Joey"} })
+// }
 
 const Bread = mongoose.model('Bread', breadSchema)
 module.exports = Bread
 
-  // helper static methods
-// breadSchema.statics.getBakedByJoey = function(bakerName){
-//   return this.find({ baker: { bakerName } })
-// }
 
-// breads.get('/:id', (req, res) => {
-//   Bread.findById(req.params.id)
-//     .then(foundBread => {
-//       const breadsByJoey = Bread.getBakedByJoey();
-//       console.log(breadsByJoey);
-//       res.render('show', {
-//         bread: foundBread
-//       })
-//     })
-//     .catch(err => {
-//       res.send('404')
-//     })
-// })
+
