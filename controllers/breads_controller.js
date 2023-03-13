@@ -6,62 +6,58 @@ const seedData = require('./seedData')
 const Baker = require('../models/baker.js')
 
 // INDEX
-breads.get('/', (req, res) => {
-  Baker.find()
-   .then(foundBakers => {
-    Bread.find()
-      .then(foundBreads => {
-        console.log(foundBreads)
-        res.render('index',{
-          breads: foundBreads,
-          bakers: foundBakers,
-          title: 'Index Page'
+breads.get('/', async (req, res) => {
+  const foundBakers = await Baker.find().lean()
+  const foundBreads = await Bread.find().limit(10).lean()
+  console.log(foundBreads)
+  res.render('index',{
+      breads: foundBreads,
+      bakers: foundBakers,
+      title: 'Index Page'
    })      
   })
- }) 
-})
-
+ 
 // NEW
-breads.get('/new', (req, res) => {
-  Baker.find()
-    .then(foundBakers => { 
-        res.render('new', {
-          bakers: foundBakers
-        })
-    })   
-})
+breads.get('/new', async (req, res) => {
+  const foundBakers = await Baker.find()
+  res.render('new', {
+  bakers: foundBakers
+  })  
+})   
 
 // EDIT
-breads.get('/:id/edit', (req, res) => {
-  Baker.find()
-    .then(foundBakers => {
-      Bread.findById(req.params.id)
-      .then(foundBread => {
-        res.render('edit', {
-          bread: foundBread,
-          bakers: foundBakers
-       })
-      })
-    })
+breads.get('/:id/edit', async (req, res) => {
+  const foundBakers = await Baker.find()
+  const foundBread = await Bread.findById(req.params.id)
+  res.render('edit', {
+    bread: foundBread,
+    bakers: foundBakers
+  })
 })
-
+    
 // SHOW
-breads.get('/:id', (req, res) => {
-  Bread.findById(req.params.id)
-      .populate('baker')
-      .then(foundBread => {
-        // const breadsByJoey = Bread.getBakedByJoey();
-        // console.log(breadsByJoey)
-        // const bakedBy = foundBread.getBakedBy()
-        // console.log(bakedBy)
-          res.render('show', {
-              bread: foundBread
-          })
-      })
-      .catch(err => {
-        res.render('404')
-      })
+breads.get('/:id', async (req, res) => {
+  try {
+    const foundBread = await Bread.findById(req.params.id).populate('baker')
+    res.render('show', {
+      bread: foundBread
+    })
+  } catch (error) {
+    res.render('404')
+  }
 })
+// breads.get('/:id', (req, res) => {
+//   Bread.findById(req.params.id)
+//       .populate('baker')
+//       .then(foundBread => {
+//           res.render('show', {
+//               bread: foundBread
+//           })
+//       })
+//       .catch(err => {
+//         res.render('404')
+//       })
+// })
 
 // CREATE
 breads.post('/', (req, res) => {
@@ -73,7 +69,6 @@ breads.post('/', (req, res) => {
   } else {
     req.body.hasGluten = false
   }
-
   Bread.create(req.body)
     .then(() => {
       res.redirect('/breads')

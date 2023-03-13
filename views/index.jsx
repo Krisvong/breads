@@ -22,9 +22,9 @@ function Index ({breads, bakers, title}) {
           {breads.map((bread) => {
                 return (
                   <li  key={bread._id} >
-                    <a href={`/breads/${bread.id}`}>{bread.name}</a>
+                    <a href={`/breads/${bread._id}`}>{bread.name}</a>
                     <ul>
-                    <li>{bread.getBakedBy()}</li>
+                    {/* <li>{bread.getBakedBy()}</li> */}
                     </ul>
                   </li>
                   )

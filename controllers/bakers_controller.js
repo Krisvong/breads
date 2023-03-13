@@ -16,7 +16,10 @@ baker.get('/', (req, res) => {
 // Show
 baker.get('/:id', (req, res) => {
     Baker.findById(req.params.id)
-      .populate('breads')
+      .populate({
+            path: 'breads',
+            options: { limit: 5 }
+      })
         .then(foundBaker =>  {
             res.render('bakerShow', {
                 baker: foundBaker
@@ -28,6 +31,15 @@ baker.get('/data/seed', (req, res) => {
     Baker.insertMany(bakerSeedData)
         .then(res.redirect('/breads'))
 })
+
+// Delete
+baker.delete('/:id', (req, res) => {
+    Baker.findByIdAndDelete(req.params.id) 
+      .then(deletedBaker => { 
+        res.status(303).redirect('/breads')
+      })
+})
+
 
 // export
 module.exports = baker                    
