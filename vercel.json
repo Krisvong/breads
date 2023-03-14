@@ -1,17 +1,15 @@
-//Set up a route that sends all incoming requests to the server.js file using the @now/node builder
-
 {
-    "version": 2, //version of the configuration file
-    "builds": [ //build the server
+    "version": 2,
+    "builds": [
       {
         "src": "server.js",
         "use": "@now/node"
       }
     ],
-    "routes": [ //how incoming requests should be handled (directed to server.js)
+    "routes": [
       {
-        "src": "/(.*)", //source file for the server (.* regular expression key specifies that any URL path will match this route.)
-        "dest": "server.js" //where the requests should be directed
+        "src": "/(.*)",
+        "dest": "server.js"
       }
     ]
   }
